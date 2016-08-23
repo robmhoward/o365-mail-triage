@@ -1,0 +1,22 @@
+{
+  "name": "o365-mail-triage",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robmhoward/o365-mail-triage.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/robmhoward/o365-mail-triage/issues"
+  },
+  "homepage": "https://github.com/robmhoward/o365-mail-triage",
+  "dependencies": {
+    "express": "^4.12.3"
+  }
+}

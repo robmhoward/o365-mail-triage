@@ -1,0 +1,35 @@
+GET https://graph.microsoft.com/v1.0/me/mailFolders/Inbox
+
+
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('cde8e228-00b5-4cb6-90c0-e6991b6f82d6')/mailFolders/$entity",
+    "id": "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQAuAAAAAABlDZTRoj6wTqag8Dj1DWJ6AQB1iIl5MD4gRrMKULg8JkZSAAACOQnJAAA=",
+    "displayName": "Inbox",
+    "parentFolderId": "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQAuAAAAAABlDZTRoj6wTqag8Dj1DWJ6AQB1iIl5MD4gRrMKULg8JkZSAAACOQnGAAA=",
+    "childFolderCount": 6,
+    "unreadItemCount": 267,
+    "totalItemCount": 1069
+}
+
+GET https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages
+
+
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('cde8e228-00b5-4cb6-90c0-e6991b6f82d6')/mailFolders('Inbox')/messages(subject,bodyPreview,sender,isRead)",
+    "@odata.nextLink": "https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$select=subject,bodyPreview,sender,isRead&$skip=10",
+    "value": [
+        {
+            "@odata.etag": "W/\"CQAAABYAAABNl/5WT4zuRpQapSgeY9y+AAAt6TV7\"",
+            "id": "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQBGAAAAAABlDZTRoj6wTqag8Dj1DWJ6BwB1iIl5MD4gRrMKULg8JkZSAAACOQnJAABNl-5WT4zuRpQapSgeY9y_AAAtsFtpAAA=",
+            "subject": "FW: Modern Lists",
+            "bodyPreview": "Other than the blog post do we have any official documentation on trevors question.  Thanks\r\n\r\nChris\r\n\r\nChris McNulty\r\nchris.mcnulty@microsoft.com\r\nOffice 425.538.2657 x82657\r\nMobile 617.980.9810\r\n\r\nFrom: Trevor Hellebuyck\r\nSent: Tuesday, August 23, 2016 ",
+            "sender": {
+                "emailAddress": {
+                    "name": "Chris McNulty",
+                    "address": "Chris.McNulty@microsoft.com"
+                }
+            },
+            "isRead": true
+        }
+        ]
+        }

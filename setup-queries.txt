@@ -1,0 +1,32 @@
+
+GET https://graph.microsoft.com/v1.0/me/mailFolders?$filter=displayName eq 'Read'
+{
+    "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users('cde8e228-00b5-4cb6-90c0-e6991b6f82d6')/mailFolders",
+    "value": [
+        {
+            "id": "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQAuAAAAAABlDZTRoj6wTqag8Dj1DWJ6AQAPwSiPJrG6R6-c1CxJ2auaAABZJ5dgAAA=",
+            "displayName": "Read",
+            "parentFolderId": "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQAuAAAAAABlDZTRoj6wTqag8Dj1DWJ6AQB1iIl5MD4gRrMKULg8JkZSAAACOQnGAAA=",
+            "childFolderCount": 0,
+            "unreadItemCount": 0,
+            "totalItemCount": 0
+        }
+    ]
+}
+
+POST https://graph.microsoft.com/v1.0/me/mailFolders
+{
+    "displayName": "Read"
+}
+
+GET https://graph.microsoft.com/v1.0/me/mailFolders?$filter=displayName eq 'Sort'
+
+POST https://graph.microsoft.com/v1.0/me/mailFolders
+{
+    "displayName": "Sort"
+}
+
+
+
+
+
