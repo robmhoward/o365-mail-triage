@@ -6,6 +6,7 @@
             <h2>{{message.subject}}</h2>
             <p>{{message.sender.emailAddress.name}} ({{message.sender.emailAddress.address}})</p>
             <p>{{message.bodyPreview}}</p>
+            <p>{{message.id}}</p>
             <p><button ng-click="moveToRead(message.id)">Read</button> <button ng-click="moveToSort(message.id)">Sort</button> <button ng-click="deleteMessage(message.id)">Delete</button></p> 
         </li>
 	</ul>

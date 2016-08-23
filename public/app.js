@@ -54,34 +54,7 @@ o365CorsApp.factory('o365CorsFactory', ['$http', function ($http) {
     factory.deleteMessage = function(messageId) {
 		return $http.delete('https://graph.microsoft.com/v1.0/me/messages/' + messageId);
 	}
-
-factory.getMessages = function() {
-		return $http.get('https://graph.microsoft.com/v1.0/me/messages');
-	}
-
-factory.getMessages = function() {
-		return $http.get('https://graph.microsoft.com/v1.0/me/messages');
-	}
-
-factory.getMessages = function() {
-		return $http.get('https://graph.microsoft.com/v1.0/me/messages');
-	}
-
-factory.getMessages = function() {
-		return $http.get('https://graph.microsoft.com/v1.0/me/messages');
-	}
-
-factory.getMessages = function() {
-		return $http.get('https://graph.microsoft.com/v1.0/me/messages');
-	}
-
-
-
-
-	factory.getMessages = function() {
-		return $http.get('https://graph.microsoft.com/v1.0/me/messages');
-	}
-
+    
 	return factory;
 }]);
 
@@ -94,11 +67,15 @@ o365CorsApp.controller("HomeController", function($scope, $q, o365CorsFactory) {
     };
     
     $scope.moveToSort = function(messageId) {
-        alert(messageId);
+        o365CorsFactory.moveMessageToSort(messageId).then(function () {
+           removeMessageFromScope(messageId); 
+        });
     };
     
     $scope.deleteMessage = function(messageId) {
-        alert(messageId);
+        o365CorsFactory.deleteMessage(messageId).then(function () {
+           removeMessageFromScope(messageId); 
+        });
     };
     
 
@@ -113,6 +90,7 @@ o365CorsApp.controller("HomeController", function($scope, $q, o365CorsFactory) {
         {
             if ($scope.messages[i].id = messageId) {
                 $scope.messages.splice(i, 1);
+                break;
             }
         }
     }
