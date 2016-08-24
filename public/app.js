@@ -30,7 +30,10 @@ o365CorsApp.factory('o365CorsFactory', ['$http', function ($http) {
 	$http.defaults.useXDomain = true;
 
 	factory.getMessages = function() {
-		return $http.get('https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages');
+		var now = new Date();
+		var today = new Date(now.getFullYear(), now.getMonth(), now.getDay());
+		var dateString = today.toISOString();
+		return $http.get('https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=receivedDateTime gt ' + dateString + '&$orderby=receivedDateTime desc&$select=subject,sender,bodyPreview');
 	}
     
     factory.getInboxInfo = function() {
@@ -38,6 +41,7 @@ o365CorsApp.factory('o365CorsFactory', ['$http', function ($http) {
 	}
 
     factory.moveMessageToSort = function(messageId) {
+		console.log("Moving message " + messageId);
 		return $http.post(
             'https://graph.microsoft.com/v1.0/me/messages/' + messageId + '/move',
             { "destinationId": "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQAuAAAAAABlDZTRoj6wTqag8Dj1DWJ6AQAPwSiPJrG6R6-c1CxJ2auaAABZJ5dfAAA=" }
@@ -77,7 +81,6 @@ o365CorsApp.controller("HomeController", function($scope, $q, o365CorsFactory) {
            removeMessageFromScope(messageId); 
         });
     };
-    
 
 	$scope.messages = [{Subject: "Loading..."}];
 	
@@ -88,7 +91,8 @@ o365CorsApp.controller("HomeController", function($scope, $q, o365CorsFactory) {
     function removeMessageFromScope(messageId) {
         for (var i = 0; i < $scope.messages.length; i++ )
         {
-            if ($scope.messages[i].id = messageId) {
+            if ($scope.messages[i].id == messageId) {
+				console.log("Removing this message from scope: " + $scope.messages[i].subject);
                 $scope.messages.splice(i, 1);
                 break;
             }
