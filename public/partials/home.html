@@ -1,6 +1,6 @@
 <div class="container">
 
-	<h2>Messages <a ng-click="refresh()">(Refresh)</a></h2>
+	<h2>Messages - {{messageCount}} remaining <button ng-click="refresh()">Refresh</button></h2>
 	<ul>
 		<li ng-repeat="message in messages">
             <h2>{{message.subject}}</h2>

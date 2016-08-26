@@ -120,6 +120,10 @@ o365CorsApp.controller("HomeController", function($scope, $q, o365CorsFactory) {
 		$scope.messages = response.data.value;
 	});
 
+	o365CorsFactory.getInboxInfo().then(function(response) {
+		$scope.messageCount = response.data.totalItemCount;
+	});
+
 });
 
 function removeMessageFromScope(messageId) {
