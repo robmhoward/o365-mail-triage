@@ -8,6 +8,13 @@ o365CorsApp.config(['$routeProvider', '$httpProvider', 'adalAuthenticationServic
 				templateUrl: 'partials/home.html',
 				requireADLogin: true
 			})
+		.when('/sort',
+			{
+				controller: 'SortController',
+				templateUrl: 'partials/sort.html',
+				requireADLogin: true 
+
+			})
 		.otherwise({redirectTo: '/' });
 
 	var adalConfig = {
@@ -27,31 +34,42 @@ o365CorsApp.config(['$routeProvider', '$httpProvider', 'adalAuthenticationServic
 o365CorsApp.factory('o365CorsFactory', ['$http', function ($http) {
 	var factory = {};
 
+	var sortFolderId = "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQAuAAAAAABlDZTRoj6wTqag8Dj1DWJ6AQAPwSiPJrG6R6-c1CxJ2auaAABZJ5dfAAA=";
+	var readFolderId = "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQAuAAAAAABlDZTRoj6wTqag8Dj1DWJ6AQAPwSiPJrG6R6-c1CxJ2auaAABZJ5dgAAA=";
+
 	$http.defaults.useXDomain = true;
 
-	factory.getMessages = function() {
+	factory.getInboxMessages = function() {
 		var now = new Date();
-		var today = new Date(now.getFullYear(), now.getMonth(), now.getDay());
-		var dateString = today.toISOString();
+		var dateString = (new Date(now.getFullYear(), now.getMonth(), now.getDate())).toISOString();
 		return $http.get('https://graph.microsoft.com/v1.0/me/mailFolders/Inbox/messages?$filter=receivedDateTime gt ' + dateString + '&$orderby=receivedDateTime desc&$select=subject,sender,bodyPreview');
 	}
-    
+
+	factory.getSortMessages = function() {
+		var now = new Date();
+		var dateString = (new Date(now.getFullYear(), now.getMonth(), now.getDate())).toISOString();
+		return $http.get('https://graph.microsoft.com/v1.0/me/mailFolders/' + sortFolderId + '/messages?$filter=receivedDateTime gt ' + dateString + '&$orderby=receivedDateTime desc&$select=subject,sender,bodyPreview');
+	}
+
+	factory.searchForFolder = function(searchString) {
+		return $http.get('https://graph.microsoft.com/v1.0/me/mailFolders/' + sortFolderId + '/messages?$filter=receivedDateTime gt ' + dateString + '&$orderby=receivedDateTime desc&$select=subject,sender,bodyPreview');
+	}
+
     factory.getInboxInfo = function() {
 		return $http.get('https://graph.microsoft.com/v1.0/me/mailFolders/Inbox');
 	}
 
     factory.moveMessageToSort = function(messageId) {
-		console.log("Moving message " + messageId);
 		return $http.post(
             'https://graph.microsoft.com/v1.0/me/messages/' + messageId + '/move',
-            { "destinationId": "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQAuAAAAAABlDZTRoj6wTqag8Dj1DWJ6AQAPwSiPJrG6R6-c1CxJ2auaAABZJ5dfAAA=" }
+            { "destinationId": sortFolderId }
         );
 	}
 
     factory.moveMessageToRead = function(messageId) {
 		return $http.post(
             'https://graph.microsoft.com/v1.0/me/messages/' + messageId + '/move',
-            { "destinationId": "AAMkAGQ5MGIyODY4LTg0MTEtNDVkOC1iYTE1LWU5NjYwYjMxNzRmOQAuAAAAAABlDZTRoj6wTqag8Dj1DWJ6AQAPwSiPJrG6R6-c1CxJ2auaAABZJ5dgAAA=" }
+            { "destinationId": readFolderId }
         );
 	}
     
@@ -62,7 +80,21 @@ o365CorsApp.factory('o365CorsFactory', ['$http', function ($http) {
 	return factory;
 }]);
 
+o365CorsApp.controller("SortController", function($scope, $q, o365CorsFactory) {
+	o365CorsFactory.getSortMessages().then(function(response) {
+		$scope.messages = response.data.value;
+	});
+
+	o365CorsFactory.get
+});
+
 o365CorsApp.controller("HomeController", function($scope, $q, o365CorsFactory) {
+
+	$scope.refresh = function() {
+		o365CorsFactory.getInboxMessages().then(function(response) {
+			$scope.messages = response.data.value;
+		});		
+	}
 
     $scope.moveToRead = function(messageId) {
         o365CorsFactory.moveMessageToRead(messageId).then(function () {
@@ -84,19 +116,18 @@ o365CorsApp.controller("HomeController", function($scope, $q, o365CorsFactory) {
 
 	$scope.messages = [{Subject: "Loading..."}];
 	
-	o365CorsFactory.getMessages().then(function(response) {
+	o365CorsFactory.getInboxMessages().then(function(response) {
 		$scope.messages = response.data.value;
 	});
 
-    function removeMessageFromScope(messageId) {
-        for (var i = 0; i < $scope.messages.length; i++ )
-        {
-            if ($scope.messages[i].id == messageId) {
-				console.log("Removing this message from scope: " + $scope.messages[i].subject);
-                $scope.messages.splice(i, 1);
-                break;
-            }
-        }
-    }
-
 });
+
+function removeMessageFromScope(messageId) {
+	for (var i = 0; i < $scope.messages.length; i++ )
+	{
+		if ($scope.messages[i].id == messageId) {
+			$scope.messages.splice(i, 1);
+			break;
+		}
+	}
+}
